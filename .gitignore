@@ -1,0 +1,29 @@
+# Generated binaries and executables
+/target/
+**/*.rs.bk
+
+# IDE specific files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Cargo lock file
+Cargo.lock
+blueprint.lock
+blueprint.json
+
+# Debug files
+**/*.pdb
+**/*.dSYM/
+
+# System files
+.DS_Store
+Thumbs.db

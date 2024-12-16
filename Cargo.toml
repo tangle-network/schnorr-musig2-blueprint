@@ -1,0 +1,33 @@
+[package]
+name = "schnorrkel-multisig-blueprint"
+version = "0.1.1"
+description = "A Bitcoin-compatible blueprint that can run schnorrkel multisig signing jobs on demand from the Tangle network"
+edition = "2021"
+
+[package.metadata.blueprint]
+manager = { Evm = "SchnorrkelMuSigBlueprint" }
+
+[dependencies]
+gadget-sdk = { git = "https://github.com/tangle-network/gadget", branch = "dec-11-debugging", features = ["std"] }
+color-eyre = { version = "0.6", features = ["tracing-error", "color-spantrace"] }
+hex = { version = "0.4.3", default-features = false }
+k256 = { version = "0.13.3", default-features = false, features = ["serde"] }
+sp-core = { version = "31.0.0", default-features = false }
+serde = { version = "1.0.214", features = ["derive"] }
+round-based = { version = "0.3.2", features = ["runtime-tokio"] }
+thiserror = "2.0.3"
+
+# MPC specific deps
+musig2 = { version = "0.2.1", default-features = false, features = ["k256", "serde", "rand"] }
+
+[build-dependencies]
+blueprint-metadata = { git = "https://github.com/tangle-network/gadget", branch = "dec-11-debugging" }
+
+[dev-dependencies]
+blueprint-test-utils = { git = "https://github.com/tangle-network/gadget", branch = "dec-11-debugging" }
+cargo-tangle = { git = "https://github.com/tangle-network/gadget", branch = "dec-11-debugging" }
+tokio = { version = "1.42.0", features = ["test-util"] }
+
+[features]
+default = ["std"]
+std = []
