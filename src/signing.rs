@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 
-use crate::context::SchnorrkelContext;
+use crate::context::SchnorrContext;
 use gadget_sdk::keystore::BackendExt;
 use gadget_sdk::{
     contexts::*,
@@ -27,7 +27,7 @@ pub enum SigningError {
 }
 
 /// Configuration constants for the BLS signing process
-const SIGNING_SALT: &str = "schnorrkel-signing";
+const SIGNING_SALT: &str = "schnorr-signing";
 
 impl From<SigningError> for GadgetError {
     fn from(err: SigningError) -> Self {
@@ -39,7 +39,7 @@ impl From<SigningError> for GadgetError {
     id = 1,
     params(message),
     event_listener(
-        listener = TangleEventListener<SchnorrkelContext, JobCalled>,
+        listener = TangleEventListener<SchnorrContext, JobCalled>,
         pre_processor = services_pre_processor,
         post_processor = services_post_processor,
     ),
@@ -58,7 +58,7 @@ impl From<SigningError> for GadgetError {
 /// - Failed to retrieve blueprint ID or call ID
 /// - Failed to retrieve the key entry
 /// - Signing process failed
-pub async fn sign(message: Vec<u8>, context: SchnorrkelContext) -> Result<Vec<u8>, GadgetError> {
+pub async fn sign(message: Vec<u8>, context: SchnorrContext) -> Result<Vec<u8>, GadgetError> {
     // Get configuration and compute deterministic values
     let blueprint_id = context
         .blueprint_id()
@@ -85,7 +85,7 @@ pub async fn sign(message: Vec<u8>, context: SchnorrkelContext) -> Result<Vec<u8
         crate::compute_deterministic_hashes(n, blueprint_id, call_id, SIGNING_SALT);
 
     gadget_sdk::info!(
-        "Starting Schnorrkel MuSig Signing for party {i}, n={n}, eid={}",
+        "Starting Schnorr Musig2 Signing for party {i}, n={n}, eid={}",
         hex::encode(deterministic_hash)
     );
 
@@ -100,13 +100,13 @@ pub async fn sign(message: Vec<u8>, context: SchnorrkelContext) -> Result<Vec<u8
 
     let party = round_based::party::MpcParty::connected(network);
 
-    let output = crate::signing_state_machine::schnorrkel_signing_protocol(
+    let output = crate::signing_state_machine::schnorr_signing_protocol(
         party, &parties, local_key, i, n, &message,
     )
     .await?;
 
     gadget_sdk::info!(
-        "Ending Schnorrkel MuSig Signing for party {i}, n={n}, eid={}",
+        "Ending Schnorr Musig2 Signing for party {i}, n={n}, eid={}",
         hex::encode(deterministic_hash)
     );
 

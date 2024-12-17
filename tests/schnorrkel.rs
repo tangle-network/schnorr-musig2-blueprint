@@ -1,4 +1,4 @@
-use schnorrkel_multisig_blueprint::signing::SIGN_JOB_ID;
+use schnorr_musig2_blueprint::signing::SIGN_JOB_ID;
 
 const N: usize = 3;
 const T: usize = 2;
@@ -13,7 +13,7 @@ use blueprint_test_utils::{
 #[tokio::test(flavor = "multi_thread")]
 async fn test_blueprint() {
     setup_log();
-    gadget_sdk::info!("Running Schnorrkel multisig blueprint test");
+    gadget_sdk::info!("Running Schnorr multisig blueprint test");
     let tmp_dir = blueprint_test_utils::tempfile::TempDir::new().unwrap();
     let tmp_dir_path = tmp_dir.path().to_string_lossy().into_owned();
     let node_config = NodeConfig::new(false);

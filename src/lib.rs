@@ -2,7 +2,7 @@ pub mod context;
 pub mod signing;
 pub(crate) mod signing_state_machine;
 
-const META_SALT: &str = "schnorrkel-musig-protocol";
+const META_SALT: &str = "schnorr-musig2-protocol";
 /// Helper function to compute deterministic hashes for the BLS processes.
 /// Note: for signing, the "call_id" should be the call_id of the preceeding
 /// keygen job

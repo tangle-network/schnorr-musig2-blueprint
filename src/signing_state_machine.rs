@@ -15,7 +15,7 @@ use serde::{Deserialize, Serialize};
 use std::collections::BTreeMap;
 
 #[derive(Default, Serialize, Deserialize, Clone)]
-pub struct SchnorrkelMuSigState {
+pub struct SchnorrMusig2State {
     #[serde(skip)]
     pub secret_key: Option<SecretKey>,
     #[serde(skip)]
@@ -45,21 +45,21 @@ pub struct Msg2 {
     pub partial_sig: PartialSignature,
 }
 
-pub async fn schnorrkel_signing_protocol<M, T>(
+pub async fn schnorr_signing_protocol<M, T>(
     party: M,
     parties: &BTreeMap<u16, ecdsa::Public>,
     local_id: TanglePairSigner<ecdsa::Pair>,
     i: PartyIndex,
     n: u16,
     input_data_to_sign: T,
-) -> Result<SchnorrkelMuSigState, SigningError>
+) -> Result<SchnorrMusig2State, SigningError>
 where
     M: Mpc<ProtocolMessage = Msg>,
     T: AsRef<[u8]>,
 {
     let MpcParty { delivery, .. } = party.into_party();
     let (incomings, mut outgoings) = delivery.split();
-    let mut signing_state = SchnorrkelMuSigState::default();
+    let mut signing_state = SchnorrMusig2State::default();
     let input_data_to_sign = input_data_to_sign.as_ref();
 
     // Extract secret key from local signer for additional entropy

@@ -2,21 +2,21 @@ use color_eyre::Result;
 use gadget_sdk::info;
 use gadget_sdk::runners::tangle::TangleConfig;
 use gadget_sdk::runners::BlueprintRunner;
-use schnorrkel_multisig_blueprint::context::SchnorrkelContext;
+use schnorr_musig2_blueprint::context::SchnorrContext;
 use sp_core::Pair;
 
 #[gadget_sdk::main(env)]
 async fn main() -> Result<()> {
-    let context = SchnorrkelContext::new(env.clone())?;
+    let context = SchnorrContext::new(env.clone())?;
 
     info!(
-        "~~~ Executing the Schnorrkel MultiSig Blueprint for {} ~~~",
+        "~~~ Executing the Schnorr MultiSig Blueprint for {} ~~~",
         hex::encode(context.identity.public().as_ref())
     );
 
     let tangle_config = TangleConfig::default();
     let signing =
-        schnorrkel_multisig_blueprint::signing::SignEventHandler::new(&env, context.clone())
+        schnorr_musig2_blueprint::signing::SignEventHandler::new(&env, context.clone())
             .await?;
 
     BlueprintRunner::new(tangle_config, env.clone())

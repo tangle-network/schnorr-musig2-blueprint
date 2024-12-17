@@ -1,4 +1,4 @@
-use crate::signing_state_machine::SchnorrkelMuSigState;
+use crate::signing_state_machine::SchnorrMusig2State;
 use color_eyre::eyre;
 use gadget_sdk as sdk;
 use gadget_sdk::contexts::MPCContext;
@@ -9,25 +9,25 @@ use sdk::contexts::{KeystoreContext, ServicesContext, TangleClientContext};
 use std::path::PathBuf;
 use std::sync::Arc;
 
-/// The network protocol version for the Schnorrkel service
-const NETWORK_PROTOCOL: &str = "/schnorrkel/musig/1.0.0";
+/// The network protocol version for the Schnorr service
+const NETWORK_PROTOCOL: &str = "/schnorr/musig/1.0.0";
 
-/// Schnorrkel Service Context that holds all the necessary context for the service
+/// Schnorr Service Context that holds all the necessary context for the service
 /// to run. This structure implements various traits for keystore, client, and service
 /// functionality.
 #[derive(Clone, KeystoreContext, TangleClientContext, ServicesContext, MPCContext)]
-pub struct SchnorrkelContext {
+pub struct SchnorrContext {
     #[config]
     pub config: sdk::config::StdGadgetConfiguration,
     #[call_id]
     pub call_id: Option<u64>,
     pub network_backend: Arc<NetworkMultiplexer>,
-    pub store: Arc<LocalDatabase<SchnorrkelMuSigState>>,
+    pub store: Arc<LocalDatabase<SchnorrMusig2State>>,
     pub identity: ecdsa::Pair,
 }
 
 // Core context management implementation
-impl SchnorrkelContext {
+impl SchnorrContext {
     /// Creates a new service context with the provided configuration
     ///
     /// # Errors
@@ -48,7 +48,7 @@ impl SchnorrkelContext {
             }
         };
 
-        let keystore_dir = PathBuf::from(config.keystore_uri.clone()).join("schnorrkel_musig.json");
+        let keystore_dir = PathBuf::from(config.keystore_uri.clone()).join("schnorr_musig.json");
         let store = Arc::new(LocalDatabase::open(keystore_dir));
 
         Ok(Self {

@@ -1,11 +1,11 @@
 [package]
-name = "schnorrkel-multisig-blueprint"
+name = "schnorr-musig2-blueprint"
 version = "0.1.1"
-description = "A Bitcoin-compatible blueprint that can run schnorrkel multisig signing jobs on demand from the Tangle network"
+description = "A Bitcoin-compatible blueprint that can run schnorr multisig signing jobs on demand from the Tangle network"
 edition = "2021"
 
 [package.metadata.blueprint]
-manager = { Evm = "SchnorrkelMuSigBlueprint" }
+manager = { Evm = "SchnorrMusig2Blueprint" }
 
 [dependencies]
 gadget-sdk = { git = "https://github.com/tangle-network/gadget", branch = "dec-11-debugging", features = ["std"] }
